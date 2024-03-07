@@ -9,9 +9,11 @@ public class Board {
     static final int ROWS=4;
     static final int COLUMNS=6;
     private static ArrayList<Card> flippedCards;
+    private Timer timer;
     private Card[][] board;
     
     public Board() {
+        timer = new Timer();
         flippedCards = new ArrayList<Card>();
         this.board = new Card[ROWS][COLUMNS];
         String vals[] = {
@@ -55,6 +57,8 @@ public class Board {
     }
 
     public void win() {
+        timer.stopTime();
+        System.out.println(timer.getTime()/1000);
         Speaker.playSound(winSFX);
         System.out.println("You Won!");
     }
