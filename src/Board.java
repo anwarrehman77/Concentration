@@ -1,15 +1,18 @@
 package src;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 public class Board {
-    static Card c1=null;
-    static Card c2=null;
+    private static final String boomSFX = "sfx\\boom.wav";
+    private static final String winSFX = "sfx\\mariowin.wav";
     static final int ROWS=4;
     static final int COLUMNS=6;
+    private static ArrayList<Card> flippedCards;
     private Card[][] board;
     
     public Board() {
+        flippedCards = new ArrayList<Card>();
         this.board = new Card[ROWS][COLUMNS];
         String vals[] = {
             "imgs\\arcanine.png", "imgs\\arcanine.png", "imgs\\articuno.png", "imgs\\articuno.png", "imgs\\charizard.png", "imgs\\charizard.png",
@@ -26,7 +29,33 @@ public class Board {
     public Card getCard(int row, int col) {
         return board[row][col];
     }
+
     public void flipCard(int i, int j) {
-        board[i][j].flip();
+        Card c = board[i][j];
+        if (!c.isFlipped()) {
+            Speaker.playSound(boomSFX);
+            c.flip();
+            flippedCards.add(c);
+        }
+    }
+
+    public void checkForMatch() {
+        if (flippedCards.size() < 2) return;
+        Card c1 = flippedCards.get(0);
+        Card c2 = flippedCards.get(1);
+
+        if (!c1.getVal().equals(c2.getVal())) {
+            c1.flip();
+            c2.flip();
+        }
+        flippedCards.clear();
+        for (Card[] r : board) for (Card c : r) if (!c.isFlipped()) return;
+
+        win();
+    }
+
+    public void win() {
+        Speaker.playSound(winSFX);
+        System.out.println("You Won!");
     }
 }

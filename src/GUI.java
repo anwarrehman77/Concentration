@@ -28,7 +28,6 @@ public class GUI extends JFrame {
         }
 
         updateUI();
-
         getContentPane().add(panel);
         pack();
         setLocationRelativeTo(null);
@@ -53,16 +52,17 @@ public class GUI extends JFrame {
     private class CardButtonListener implements ActionListener {
         private int row;
         private int col;
-
         public CardButtonListener(int row, int col) {
             this.row = row;
             this.col = col;
         }
-
         @Override
         public void actionPerformed(ActionEvent e) {
-            board.flipCard(row, col);
-            updateUI();
+            try {
+                board.flipCard(row, col);
+                updateUI();
+                board.checkForMatch();
+            } catch (Exception e1) {}
         }
     }
 }
